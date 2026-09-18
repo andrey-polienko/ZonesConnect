@@ -1,0 +1,24 @@
+{
+	"properties": {
+		"resourceUsage": {
+			"type": "array",
+			"items": { "type": "http://aps-standard.org/types/core/subscription/1.0#SubscriptionResource" }
+		},
+		"domainList": {
+			"type": "http://parallels.com/aps/types/pa/dns/zone/1.0"
+		},
+		"userCount": {
+			"type": "http://aps-standard.org/types/core/user/1.0/"
+		},
+		"accountBalance": {
+			"type": "number"
+		}
+	},
+	"operations": {
+		"getWidget": {
+			"parameters": {
+				"withData": { "type": "boolean", "required": false }
+			}
+		}
+	}
+}

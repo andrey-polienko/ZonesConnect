@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="/aps/2/ui/runtime/client/aps/aps.js"></script>
+<script>
+require(['aps/load', 'dojo/when', 'dojox/mvc/getStateful', 'dojox/mvc/getPlainValue', 'dojox/mvc/at', 'dijit/registry', 'aps/ResourceStore', 'aps/ready!'],
+function (load, when, getStateful, getPlainValue, at, registry, Store) {
+
+    var model = getStateful(aps.context.vars.globals);
+	console.clear();
+    // WIDGESTS
+
+    var createTextBox = function(id, title, fieldName, description, placeHolder) {
+        return ["aps/TextBox", {
+            id: id,
+            title: title,
+            value: at(model, fieldName),
+            description: description,
+            placeHolder: placeHolder,
+            autoSize: true,
+            required: true,
+            missingMessage: "Error: '" + title +"' field is mandatory."
+        }];
+	};
+  var createNonRequiredTextBox = function(id, title, fieldName, description, placeHolder) {
+      return ["aps/TextBox", {
+          id: id,
+          title: title,
+          value: at(model, fieldName),
+          description: description,
+          placeHolder: placeHolder,
+          autoSize: true
+      }];
+};
+
+
+    var fieldSet = ["aps/FieldSet", {
+            title : 'Tile Settings'
+        },
+        [
+            createTextBox("target_url", "Target URL", "target_url", "URL opened in a new tab when the tile button is clicked", "https://www.zones.com/site/standard_page/index.html"),
+            createNonRequiredTextBox("tile_title", "Tile Title", "tile_title", "Main title of the tile", "ZonesConnect"),
+            createNonRequiredTextBox("tile_label_text", "Tile Label", "tile_label_text", "Text in a small orange label in top-left corner of the tile", ""),
+            createNonRequiredTextBox("tile_hint", "Tile Hint", "tile_hint", "Small text besides the title of the tile", ""),
+            createNonRequiredTextBox("tile_text", "Tile Text", "tile_text", "Main text on the tile", "Access the Zones partner portal"),
+            createNonRequiredTextBox("tile_button_text", "Tile Button Text", "tile_button_text", "Text on the button in the tile", "Open ZonesConnect"),
+            createNonRequiredTextBox("tile_font_color", "Tile Font Color", "tile_font_color", "By default, font color from the skin will be used. Specify color in #RRGGBB format to override", "#RRGGBB"),
+            createNonRequiredTextBox("tile_background_color", "Tile Background Color", "tile_background_color", "By default, tile background from the skin will be used. Specify color in #RRGGBB format to override", "#RRGGBB"),
+            createNonRequiredTextBox("tile_icon", "Tile Icon URL", "tile_icon", "Default bundled icon will be used unless you specify an absolute URL to an image here (e.g. a hosted copy of the zones.com favicon)", "https://foo.com/img/zones-favicon.png"),
+            createNonRequiredTextBox("tile_background_image", "Tile Background Image URL", "tile_background_image", "By default, this will be a regular flat-colored tile, as per skin. Specify absolute URL to background image to override", "https://foo.com/img/cloud.png")
+        ]
+    ];
+
+    var pageContainer = [
+        "aps/PageContainer",
+        { id : "globals" },
+        [fieldSet]
+    ];
+
+    // LOAD
+
+    load(pageContainer);
+
+    // saveApplication
+
+    var saveApplication = function() {
+        var saveStore = new Store({
+            target : "/aps/2/resources"
+        });
+
+        when(saveStore.put(getPlainValue(model)),
+            function() {
+                aps.apsc.gotoView("globals");
+            },
+            function(error) {
+                aps.apsc.displayMessage(JSON.parse( error.response["text"]).message,"error");
+            }
+        );
+    };
+
+    aps.app.onSubmit = function() {
+        var page = registry.byId("globals");
+
+
+        if (page.validate()) {
+            saveApplication();
+        } else {
+            aps.aspc.displayMessage(["target_url", "tile_title", "tile_label_text", "tile_hint", "tile_text", "tile_button_text", "tile_font_color", "tile_background_color", "tile_icon", "tile_background_image"]);
+        }
+    };
+
+    aps.app.onCancel = function() {
+        aps.apsc.gotoView("globals");
+    };
+});
+</script>
+</head>
+<body>
+</body>
+</html>

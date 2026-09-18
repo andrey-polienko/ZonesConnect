@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application packaged="2026-09-17T00:00:00" version="2.0" xmlns="http://aps-standard.org/ns/2">
+    <id>https://www.zones.com/aps/zonesconnect</id>
+    <name>ZonesConnect</name>
+    <version>1.0</version>
+    <release>10</release>
+    <homepage>https://www.zones.com/</homepage>
+    <vendor>
+        <name>Zones</name>
+        <homepage>https://www.zones.com/</homepage>
+    </vendor>
+    <packager>
+        <name>Zones</name>
+        <homepage>https://www.zones.com/</homepage>
+    </packager>
+    <capabilities>
+        <business-mode>mss</business-mode>
+    </capabilities>
+    <categories>
+        <category>System</category>
+        <category>CCP</category>
+    </categories>
+    <presentation>
+        <summary>ZonesConnect</summary>
+        <description>Adds "ZonesConnect": a persistent menu item in CCP v2 / RCP, plus a Home dashboard tile for customers and resellers. Both open the Zones partner portal in a new browser tab, regardless of subscription status.</description>
+        <languages>
+            <language>en</language>
+        </languages>
+
+        <!--
+            ==== Menu item, CCP v2 (customers) ====
+            Per CloudBlue KB "Customizing the Menu in Odin Automation CCP v2": binding to
+            the generic core subscription/service collection type (rather than an
+            app-specific subscribable type) makes this item appear for every account,
+            without requiring a subscription to anything from this package.
+        -->
+        <navigation icon="fa-external-link" id="zonesconnect-item-ccp" label="ZonesConnect">
+            <plugs-to id="http://www.parallels.com/ccp/2"/>
+            <var type-id="http://aps-standard.org/types/core/account/1.0" name="core_account"/>
+            <view id="zonesconnect-view-ccp" label="ZonesConnect" src="ui/zonesconnect.js"/>
+        </navigation>
+
+        <!-- ==== Menu item, RCP (resellers) ==== -->
+        <navigation icon="fa-external-link" id="zonesconnect-item-rcp" label="ZonesConnect">
+            <plugs-to id="http://www.aps-standard.org/ui/rcp/2"/>
+            <var type-id="http://aps-standard.org/types/core/account/1.0" name="core_account"/>
+            <view id="zonesconnect-view-rcp" label="ZonesConnect" src="ui/zonesconnect.js"/>
+        </navigation>
+
+        <!--
+            ==== Home dashboard tile, customers ====
+            Uses access:global on tile_settings (see schemas/tile_settings.json), same
+            pattern as the proven "CCP for Resellers" package.
+        -->
+        <navigation id="plugins-ccp" label="ZonesConnect: Tile on Home page for Customers">
+            <view-plugin id="ux1-dashboard-tile-ccp" src="ui/plugins/ux1_dashboard_tile.js">
+                <var collection="false" name="tile_settings" type-id="https://www.zones.com/aps/zonesconnect/tile_settings/1.0" required="false"/>
+                <plugs-to id="http://www.parallels.com/ccp-dashboard#dashboard"/>
+            </view-plugin>
+        </navigation>
+
+        <!-- ==== Home dashboard tile, resellers (UX1 for Resellers) ==== -->
+        <navigation id="plugins-rcp" label="ZonesConnect: Tile on Home page for Resellers">
+            <view-plugin id="ux1-dashboard-tile-rcp" src="ui/plugins/ux1_dashboard_tile.js">
+                <var collection="false" name="tile_settings" type-id="https://www.zones.com/aps/zonesconnect/tile_settings/1.0" required="false"/>
+                <plugs-to id="http://www.parallels.com/ccp-dashboard#ux1-dashboard"/>
+            </view-plugin>
+        </navigation>
+
+        <!-- ==== Provider-side settings screen (tile text, colors, icon, target URL) ==== -->
+        <navigation id="globals" label="ZonesConnect: PCP">
+            <view id="globals" label="Tile Settings" src="ui/pcp/globals.html">
+                <var collection="false" name="globals" type-id="https://www.zones.com/aps/zonesconnect/tile_settings/1.0"/>
+                <plugs-to id="http://www.aps-standard.org/ui/application"/>
+                <controls>
+                    <submit label="Edit"/>
+                </controls>
+                <view id="globals-edit" label="Edit Global Configuration" src="ui/pcp/globals-edit.html">
+                    <var collection="false" name="globals" type-id="https://www.zones.com/aps/zonesconnect/tile_settings/1.0"/>
+                    <controls>
+                        <submit label="Save"/>
+                        <cancel/>
+                    </controls>
+                </view>
+            </view>
+        </navigation>
+    </presentation>
+
+    <license-agreement must-accept="true">
+        <free/>
+        <text>
+            <name>End-User License Agreement</name>
+            <file>http://opensource.org/licenses/bsd-license</file>
+        </text>
+    </license-agreement>
+
+    <upgrade match="version=ge=1"/>
+
+    <!--
+        Single application resource type, shared by both the tile view-plugins and the
+        PCP settings screen. access:global=true is what makes the tile work without a
+        subscription (the menu items above use a different mechanism - the generic
+        subscription/service var - and don't depend on this flag).
+    -->
+    <service id="globals">
+        <schema path="schemas/tile_settings.json"/>
+        <presentation>
+            <name>Settings</name>
+            <summary>Tile Settings</summary>
+        </presentation>
+    </service>
+
+</application>

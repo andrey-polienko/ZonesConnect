@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<script src="/aps/2/ui/runtime/client/aps/aps.js"></script>
+
+<script>
+require(['aps/load', 'aps/ready!'],
+function (load) {
+    var model = aps.context.vars.globals;
+    // WIDGESTS
+
+    var createOutput = function(title, value) {
+        return ["aps/Output", {
+            title: title,
+            value : value
+        }];
+    };
+
+    var fieldSet = ["aps/FieldSet", {
+            title : 'Tile Settings'
+        },
+        [
+            createOutput("Tile Title:", model.tile_title),
+            createOutput("Tile Label:", model.tile_label_text),
+            createOutput("Tile Hint:", model.tile_hint),
+            createOutput("Tile Text:", model.tile_text),
+            createOutput("Tile Button Text:", model.tile_button_text),
+            createOutput("Tile Font Color:", model.tile_font_color),
+            createOutput("Tile Background Color:", model.tile_background_color),
+            createOutput("Tile Icon URL:", model.tile_icon),
+            createOutput("Tile Background Image URL:", model.tile_background_image),
+            createOutput("Target URL:", model.target_url)
+        ]
+    ];
+
+
+    var pageContainer = [
+        "aps/PageContainer",
+        { id : "globals" },
+        [fieldSet]
+    ];
+
+    // LOAD
+
+    load(pageContainer);
+
+
+    aps.app.onSubmit = function() {
+        aps.apsc.gotoView("globals-edit");
+    };
+});
+</script>
+</head>
+<body>
+</body>
+</html>

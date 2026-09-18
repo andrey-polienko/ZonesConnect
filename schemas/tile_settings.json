@@ -1,0 +1,67 @@
+{
+  "apsVersion" : "2.0",
+  "name" : "tile_settings",
+  "id" : "https://www.zones.com/aps/zonesconnect/tile_settings/1.0",
+  "implements" : [ "http://aps-standard.org/types/core/application/1.0" ],
+  "access" : {
+    "global" : true
+  },
+  "properties" : {
+    "tile_title" : {
+      "type" : "string",
+      "default" : "ZonesConnect",
+      "title" : "Tile Title",
+      "description" : "Main title of the tile"
+    },
+    "tile_label_text" : {
+      "type" : "string",
+      "default" : "",
+      "title" : "Tile Label",
+      "description" : "Text in a small orange label in top-left corner of the tile"
+    },
+    "tile_hint" : {
+      "type" : "string",
+      "title" : "Tile Hint",
+      "description" : "Small text besides the title of the tile"
+    },
+    "tile_text" : {
+      "type" : "string",
+      "default" : "Access the Zones partner portal",
+      "title" : "Tile Text",
+      "description" : "Main text on the tile"
+    },
+    "tile_button_text" : {
+      "type" : "string",
+      "default" : "Open ZonesConnect",
+      "title" : "Tile Button Text",
+      "description" : "Text on the button in the tile"
+    },
+    "tile_font_color" : {
+      "type" : "string",
+      "title" : "Tile Font Color",
+      "description" : "By default, font color from the skin will be used. Specify color in #RRGGBB format to override"
+    },
+    "tile_background_color" : {
+      "type" : "string",
+      "title" : "Tile Background Color",
+      "description" : "By default, tile background from the skin will be used. Specify color in #RRGGBB format to override"
+    },
+    "tile_icon" : {
+      "type" : "string",
+      "default" : "",
+      "title" : "Tile Icon URL",
+      "description" : "Default bundled icon will be used unless you specify an absolute URL to an image here (e.g. a hosted copy of the zones.com favicon)"
+    },
+    "tile_background_image" : {
+      "type" : "string",
+      "title" : "Tile Background Image URL",
+      "description" : "By default, this will be a regular flat-colored tile, as per skin. Specify absolute URL to background image to override"
+    },
+    "target_url" : {
+      "type" : "string",
+      "default" : "https://www.zones.com/site/standard_page/index.html",
+      "title" : "Target URL",
+      "description" : "The URL opened in a new tab when the tile's button is clicked"
+    }
+  }
+}
